@@ -40,3 +40,57 @@ CREATE TABLE backup_tp
     fecha TIMESTAMP,
     PRIMARY KEY (dni,fecha)
 )
+
+/*
+INSTRUCTIVO PARA CARGAR DATOS EN CSV
+
+** = Si queremos correr todo en pampero, sino podemos darle run en DataGrip
+
+    Descargar los csv y ponerlos en una carpeta "BD1-Grupo2"
+    ** Poner dentro tambien el archivo sql
+
+    Abrir una terminal en el CWD y pasar los CSV a pampero
+        scp -r ./BD1-Grupo2 gfrancois@pampero.itba.edu.ar:./
+
+    Conectarse con Pampero
+        ssh usuario@pampero.itba.edu.ar -L 8888:bd1.it.itba.edu.ar:5432
+
+    Revisar que esten los documentos:
+        cd BD1-Grupo2
+        ls
+    Deberia indicar: clientes_banco.csv  pagos_cuotas.csv  prestamos_banco.csv **tables.sql
+
+   ** Correr el sql para generar las tablas (solo una vez)
+        psql -h bd1.it.itba.edu.ar -U usuario -f tables.sql PROOF
+
+    Conectarse con postgresql
+        psql -h bd1.it.itba.edu.ar -U usuario PROOF
+
+    Copiar los datos
+        \copy cliente_tp(Codigo,Dni,Telefono,Nombre,Direccion) FROM clientes_banco.csv csv delimiter ',' header;
+        \copy prestamo_tp(Codigo,Fecha,cod_cliente,Importe) FROM prestamos_banco.csv csv delimiter ',' header;
+        \copy cuota_tp(numero_couta,cod_prestamo,Importe,Fecha) FROM pagos_cuotas.csv csv delimiter ',' header;
+
+    Verificar que se cargaron los datos desde datagrip
+
+    salir de postgresql
+        exit
+
+    salir de la carpeta
+        cd ..
+
+    Mantenerse en pampero para utilizar las tablas desde DataGrip
+ */
+
+/*
+VERIFICAR QUE SE CARGO
+select *
+from cliente_tp;
+
+
+select *
+from prestamo_tp;
+
+select *
+from cuota_tp;
+ */
