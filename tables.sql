@@ -2,7 +2,7 @@
 
 CREATE TABLE cliente_tp
 (
-    dni       TEXT,
+    dni       TEXT NOT NULL,
     nombre    TEXT,
     direccion TEXT,
     telefono  TEXT,
@@ -21,11 +21,11 @@ CREATE TABLE prestamo_tp
 
 CREATE TABLE cuota_tp
 (
-    numero_couta INT check ( numero_couta > 0 ),
+    numero_cuota INT check ( numero_cuota > 0 ),
     importe INT check ( importe > 0 ),
     fecha DATE,
     cod_prestamo INT,
-    PRIMARY KEY (numero_couta,cod_prestamo),
+    PRIMARY KEY (numero_cuota,cod_prestamo),
     FOREIGN KEY (cod_prestamo) REFERENCES prestamo_tp(codigo) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -33,13 +33,14 @@ CREATE TABLE backup_tp
 (
     dni TEXT,
     nombre TEXT,
-    monto_prestamos INT check ( monto_prestamos > 0 ),
-    monto_pago_cuotas INT check ( monto_pago_cuotas >= 0 ),
+    telefono TEXT,
     cant_prestamos INT check ( cant_prestamos >= 0 ),
+    monto_prestamos INT check ( monto_prestamos >= 0 ),
+    monto_pago_cuotas INT check ( monto_pago_cuotas >= 0 ),
     ind_pagos_pendientes BOOLEAN,
     fecha TIMESTAMP,
     PRIMARY KEY (dni,fecha)
-)
+);
 
 /*
 INSTRUCTIVO PARA CARGAR DATOS EN CSV
@@ -69,7 +70,7 @@ INSTRUCTIVO PARA CARGAR DATOS EN CSV
     Copiar los datos
         \copy cliente_tp(Codigo,Dni,Telefono,Nombre,Direccion) FROM clientes_banco.csv csv delimiter ',' header;
         \copy prestamo_tp(Codigo,Fecha,cod_cliente,Importe) FROM prestamos_banco.csv csv delimiter ',' header;
-        \copy cuota_tp(numero_couta,cod_prestamo,Importe,Fecha) FROM pagos_cuotas.csv csv delimiter ',' header;
+        \copy cuota_tp(numero_cuota,cod_prestamo,Importe,Fecha) FROM pagos_cuotas.csv csv delimiter ',' header;
 
     Verificar que se cargaron los datos desde datagrip
 
